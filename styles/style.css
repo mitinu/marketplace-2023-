@@ -1,0 +1,219 @@
+body{
+    background-color: #393939;
+    color: whitesmoke;
+    font-family: Arial, Helvetica, sans-serif;
+}
+header{ 
+    display: flex;  
+    justify-content: space-evenly; 
+    background-color: #888888;
+
+}
+.img{
+    height: 200px;
+    width: 200px;
+    background-color: whitesmoke;
+}
+#add_prodyct{
+    width: 140px;
+    display: none;
+}
+#exit{
+    display: none;
+}
+#profile{
+    display: none;
+}
+#registr{
+    display: none;
+}
+#enterr{
+    display: none;
+}
+#content{
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+.menu_super{
+    width: 380px;
+    background-color: gray;
+}
+/*vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
+.body{
+    display: flex;
+}
+#goods{
+    width: 70%;
+    display: flex;
+    flex-wrap: wrap;
+}
+.basket{
+    position: fixed;
+    right: 0;
+    width:30%;
+    height: 93%; 
+    margin: 10px;
+    outline: 10px ridge purple; /*solid   ridge   outset    inset*/
+    background-color: gray;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: start;
+}
+.product_basket{
+    width: 100%;
+    display: flex;
+}
+.name_product_basket{
+    width: 60%;
+}
+.price_product_basket{
+    width: 20%;
+}
+.count_product_basket{
+    width: 10%;
+}
+.button_product_basket{
+    width: 5%;
+}
+.parent_position{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #9c9c9c5d;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+}
+.child_position{
+    background-color: #d8d7d7;
+    width: 360px;
+    height: 390px;
+}
+.content_center{
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+}
+.nepon{
+    color: rgb(54, 54, 54);
+    font-size: 20pt;
+    margin-bottom: 30px;
+
+}
+input[type=button]{
+    background-color: #393939;
+    border-radius: 5px;
+    border: 1px solid rgb(143, 68, 163);
+    color: whitesmoke;
+    height: 23px;
+    width: 90px;
+    margin: 10px;
+}
+input[type=text]{
+
+    width: 180px;
+    margin: 10px;
+    border-radius: 5px;
+    border: 1px solid rgb(143, 68, 163);
+    
+}
+input[type=password]{
+
+    width: 180px;
+    margin: 10px;
+    border-radius: 5px;
+    border: 1px solid rgb(143, 68, 163);
+    
+}
+input[type=button]:hover{
+    box-shadow: 1px 1px 25px 10px rgba(181, 183, 255, 0.4);
+}
+input[type=button]:before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      120deg,
+      transparent,
+      rgba(146, 148, 248, 0.4),
+      transparent
+    );
+    transition: all 650ms;
+}
+.line_content input[type=button]{
+    margin: 0;
+}
+.container{
+    /* width: 250px;
+    height: 250px; */
+    padding: 10px;
+    background-color: #9c9c9c;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    border-radius: 20px;
+
+}
+.aaa{
+    width: 250px;
+    height: 250px;
+    margin: 10px;
+}
+.aaa:hover .container{
+    position: fixed;
+    width: 250px;
+    height: 250px;
+    /* width: 300px;
+    height: 300px; */
+    transform-origin: left top;
+    margin-top: -10px;
+    margin-left: 20px;
+    transition: margin-left 600ms;
+    transition: margin-top 600ms;
+}
+
+.child_position{
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+}
+.child_position input[type=text]{
+    width: 350px;
+    height: 40px;
+}
+.child_position input[type=password]{
+    width: 350px;
+    height: 40px;
+}
+.parent_position .child_position .add_prodyct{
+    width: 180px;
+    height: 40px;
+    font-size: 14pt;
+    font-weight: 510;
+}
+.parent_position .child_position .X{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 22px;
+    height: 22px;
+}
+#content .menu_super .x{
+    width: 22px;
+    height: 22px;
+}
+
+/*vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
+

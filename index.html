@@ -1,0 +1,256 @@
+<html> 
+    <head> 
+        <meta charset="UTF-8"> 
+        <title>index</title> 
+        <link rel="stylesheet" href="style.css"> 
+    </head> 
+    <body>
+        <header><?xml version="1.0" encoding="utf-8"?>
+            <b class="content_center">Не Shop</b>
+            <svg width="40px" height="40px" viewBox="0 0 24 24" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"><defs><style>.cls-1{fill:none;stroke:#020202;stroke-miterlimit:10;stroke-width:1.91px;}</style></defs><circle class="cls-1" cx="12" cy="4.34" r="2.86"/><circle class="cls-1" cx="19.64" cy="16.75" r="2.86"/><circle class="cls-1" cx="4.36" cy="16.75" r="2.86"/><path class="cls-1" d="M6,19.09a8.59,8.59,0,0,0,12,0"/><path class="cls-1" d="M14.82,4.82a8.57,8.57,0,0,1,5.77,8.11,6.71,6.71,0,0,1-.08,1.1"/><path class="cls-1" d="M3.49,14a6.71,6.71,0,0,1-.08-1.1A8.57,8.57,0,0,1,9.18,4.82"/></svg> 
+            <div class="content_center"> 
+                <input type="text"> 
+                <input type="button" value="поиск"> 
+            </div> 
+            <div class="content_center"> 
+                <input type="button" value="вход" id="enterr" onclick="enterr()">
+                <input type="button" value="регестрация" id="registr" onclick="registr()">
+                <a href="/login"><input type="button" value="профиль" id="profile"></a> 
+                <input type="button" value="выход" id="exit" onclick="exit()">
+                <input type="button" value="добавить товар" id="add_prodyct" onclick="addgoods()">
+            </div> 
+        </header> 
+        <div class="body">
+            <div id="goods"></div>
+            <div class="basket">карзина</div>
+            <div id="crutch"></div>
+        </div>
+        <script src="socket.io/socket.io.js"></script> 
+        <script>
+            let socket = io() 
+            if(localStorage.getItem("profile_swit") == null){
+                localStorage.setItem("profile_swit", 0)  
+            }
+            if(localStorage.getItem("profile_swit") == 0){
+                document.getElementById("registr").style.display = "inline"
+                document.getElementById("enterr").style.display = "inline"
+            }
+            else{
+                document.getElementById("profile").style.display = "inline"
+                document.getElementById("exit").style.display = "inline"
+                if(localStorage.getItem("profile_swit") == 1){
+                    document.getElementById("add_prodyct").style.display = "inline"
+                }
+            }
+            function exit(){ 
+                localStorage.setItem("thisid", null)
+                localStorage.setItem("profile_swit", 0)
+                document.getElementById("registr").style.display = "inline"
+                document.getElementById("enterr").style.display = "inline"
+                document.getElementById("profile").style.display = "none"
+                document.getElementById("exit").style.display = "none"
+                document.getElementById("add_prodyct").style.display = "none"
+
+
+                    
+                if(document.getElementsByClassName("basket")[0] != null){
+                    document.getElementsByClassName("basket")[0].remove()  
+                }
+                else{
+                    document.getElementById("goods").style.width = '70%'
+                }
+                document.getElementById("crutch").insertAdjacentHTML("beforebegin", "<div class='basket'>карзина</div>")
+
+
+                document.getElementById("goods").remove()
+                document.getElementsByClassName("basket")[0].insertAdjacentHTML("beforebegin", "<div id='goods'></div>")
+            }
+            start_index()
+            socket.on("return_product", function(product_arr){
+                if(localStorage.getItem("profile_swit") == 2){
+                    for(let i = 0; i < product_arr.length; i++){
+                        let html_code_container = "<div class='aaa'><div class='container'><div class='img'></div><div class='line_content'><span class='name'></span><span class='price'></span><input type='button' value='заказать' class='buy' onclick='push_basket(this)' id='button_" + i + "'></div></div></div>"
+                        document.getElementById("goods").insertAdjacentHTML("beforeend", html_code_container)
+                        if(product_arr[i].name.length < 11){
+                            document.getElementsByClassName('name')[i].textContent = product_arr[i].name + " "
+                        }
+                        else{
+                            document.getElementsByClassName('name')[i].textContent = product_arr[i].name.slice(0,8)+ "... "
+                        }
+                        document.getElementsByClassName('price')[i].textContent = product_arr[i].price + "$ "
+                    } 
+                }
+                if(localStorage.getItem("profile_swit") == 1){
+                    j = 0
+                    for(let i = 0; i < product_arr.length; i++){
+                        if(localStorage.getItem("thisid") == product_arr[i].ID_Market){
+                            let html_code_container = "<div class='aaa'><div class='container'><div class='img'></div><div class='line_content'><span class='name'></span><span class='price'></span><input type='button' value='удалить' class='buy' onclick='delite_products(this)' id='button_" + j + "_" +  product_arr[i].ID + "'></div></div></div>"
+                            document.getElementById("goods").insertAdjacentHTML("beforeend", html_code_container)
+                            document.getElementsByClassName('name')[j].textContent = product_arr[i].name + " "
+                            document.getElementsByClassName('price')[j].textContent = product_arr[i].price + "$ "
+                            j++
+                        }
+                        
+                    }
+                }
+            })
+            function enterr(){
+                let html_code = "<div class='parent_position'><div class='child_position'><span class='nepon'>регестрация</span><input type='text' placeholder='login' id='login'><input type='password' placeholder='password' id='password'><input type='button' value='вход' onclick='enter_reg()'><input type='button' class='X' value='X' onclick='X()'></div></div>"
+                document.getElementsByClassName("body")[0].insertAdjacentHTML("beforeend", html_code)
+            }
+            function registr(){
+                let html_code = "<div class='parent_position'><div class='child_position'><span class='nepon'>вход</span><input type='text' placeholder='name' id='name'><input type='text' placeholder='login' id='login'><input type='password' placeholder='password' id='password'><select id='select'><option value='2'>пользователь</option><option value='1'>магазин</option></select><input type='button' value='регистрация' onclick='registr_reg()'><input type='button' class='X' value='X' onclick='X()'></div></div>"
+                document.getElementsByClassName("body")[0].insertAdjacentHTML("beforeend", html_code)
+            }
+            
+            function X(){
+                document.getElementsByClassName("parent_position")[0].remove()
+            }
+            
+            function enter_reg(){ 
+                let market_users = { 
+                    "login": document.getElementById("login").value, 
+                    "password": document.getElementById("password").value 
+                } 
+ 
+                socket.emit("enter", market_users)  
+            }
+            socket.on("enter_answer", function(market_or_user_and_id){
+                if(market_or_user_and_id.market_or_user != 0){ 
+                    localStorage.setItem('profile_swit', market_or_user_and_id.market_or_user)
+                    localStorage.setItem('thisid', market_or_user_and_id.thisid)
+                    if(localStorage.getItem("profile_swit") != 0){
+                        document.getElementById("profile").style.display = "inline"
+                        document.getElementById("exit").style.display = "inline"
+                        document.getElementById("registr").style.display = "none"
+                        document.getElementById("enterr").style.display = "none"
+                        if (localStorage.getItem("profile_swit")== 1) {
+                            document.getElementById("add_prodyct").style.display = "inline"
+                        }
+                    }
+                document.getElementsByClassName("parent_position")[0].remove()
+                start_index()
+                    // document.location.href = '/login'
+                } 
+            })
+            
+            function registr_reg(){ 
+                socket.emit("check_login_regist", document.getElementById("login").value) 
+            } 
+            socket.on("answer_login_regist", function(check){ 
+                if(check){ 
+                    let market_users = { 
+                        "market_if": parseInt(document.getElementById("select").value),
+                        "name": document.getElementById("name").value, 
+                        "login": document.getElementById("login").value, 
+                        "password": document.getElementById("password").value 
+                    } 
+                    socket.emit("registr", market_users) 
+                    localStorage.setItem('profile_swit', document.getElementById("select").value) 
+                    document.location.href = '/login' 
+                } 
+            })
+            socket.on("return_id", function(id){
+                localStorage.setItem("thisid", id)
+            })
+            function delite_products(this_batoon){
+                document.getElementsByClassName("aaa")[parseInt(this_batoon.id.split("_")[1])].remove()
+                socket.emit("delite_products", parseInt(this_batoon.id.split("_")[2]))
+            }
+            function push_basket(this_batoon){
+                let sending_ID_product_and_user = {
+                    "id_product": parseInt(this_batoon.id.split("_")[1]),
+                    "id_user": localStorage.getItem("thisid")
+                }
+                socket.emit("push_basket", sending_ID_product_and_user)
+            }
+            function addgoods(){
+                let html_code = "<div class='parent_position'><div class='child_position'><span class='nepon'>добваление товара</span><input type='text' id='name' placeholder='название'><input type='text' id='desc' placeholder='описание'><input type='text' id='price' placeholder='цена'><input type='button' class='add_prodyct' value='создать товар' onclick='addproduct()'><input type='button' class='X' value='X' onclick='X()'></div>"
+                document.getElementsByClassName("body")[0].insertAdjacentHTML("beforeend", html_code)
+            } 
+            function addproduct(){
+                market_id = localStorage.getItem("thisid")
+                price = document.getElementById("price").value
+                let goods_obj = { 
+                    "name":document.getElementById("name").value, 
+                    "desc":document.getElementById("desc").value,
+                    "price":parseInt(price),
+                    "ID_Market":parseInt(market_id)
+                } 
+                socket.emit("addgoods", goods_obj)  
+                document.location.href = '/'
+            }
+            function start_index(){
+                switch(localStorage.getItem("profile_swit")){
+                    case '1':
+                        document.getElementsByClassName("basket")[0].remove()
+                        document.getElementById("goods").style.width = '100%'
+                        socket.emit("start_index")
+                        break
+                    case '2':
+                        socket.emit("start_index")
+                        socket.emit("start_backet", localStorage.getItem("thisid"))
+                        break
+                    case '3':
+                        document.getElementsByClassName("basket")[0].remove()
+                        document.getElementById("goods").style.width = '100%'
+                        document.getElementById("goods").insertAdjacentHTML("beforeend", '<div id="markets" class="menu_super">магазин</div><div id="users" class="menu_super">пользователи</div><div id="products" class="menu_super">товары</div>')
+                        socket.emit("challenge_db")
+                        break
+                    }
+            }  
+            socket.on("return_db", function(db){
+                for(let i = 0; i < db.markets.length; i++){
+                    document.getElementById("markets").insertAdjacentHTML("beforeend", '<div id="market_' + db.markets[i].ID + '">id = <span id="market_id_'+db.markets[i].ID +'">'+db.markets[i].ID+'</span>, login = <span id="market_login_' + db.markets[i].ID + '">'+db.markets[i].login+' </span><input type="button" class="x" value="X" id="market_button_' + db.markets[i].ID + '" onclick="delete_market(this)"></div>')
+                    
+                }
+                for(let i = 0; i < db.users.length; i++) {
+                    document.getElementById("users").insertAdjacentHTML("beforeend", '<div id="user_' + db.users[i].ID + '">id = <span id="user_id_'+db.users[i].ID +'">'+db.users[i].ID+'</span>, login = <span id="user_login_' + db.users[i].ID + '">'+db.users[i].login+' </span><input type="button" class="x" value="X" id="user_button_' + db.users[i].ID + '" onclick="delete_user(this)"></div>')
+                    
+                }
+                for(let i = 0; i < db.products.length; i++) {
+                    document.getElementById("products").insertAdjacentHTML("beforeend", '<div id="product_' + db.products[i].ID + '">id = <span id="product_id_'+db.products[i].ID +'">'+db.products[i].ID+'</span>, name = <span id="product_login_' + db.products[i].ID + '">'+db.products[i].name+' </span><input type="button" class="x" value="X" id="product_button_' + db.products[i].ID + '" onclick="delete_products(this)"></div>')
+                    
+                }
+            })
+            function delete_user(this_button){
+                document.getElementById("user_"+this_button.id.split('_')[2]).remove()
+                socket.emit("delete_user",this_button.id.split('_')[2])
+            }
+            function delete_market(this_button){
+                document.getElementById("market_"+this_button.id.split('_')[2]).remove()
+                socket.emit("delete_market",this_button.id.split('_')[2])
+            }
+            function delete_products(this_button){
+                document.getElementById("product_"+this_button.id.split('_')[2]).remove()
+                socket.emit("delete_products",this_button.id.split('_')[2])
+            }
+
+            socket.on("reboot_basket", function(this_basket){
+                document.getElementsByClassName("basket")[0].remove()
+                document.getElementById("crutch").insertAdjacentHTML("beforebegin", "<div class='basket'>карзина</div>")
+
+                for(let i = 0; i < this_basket.length; i++){
+                    let html_code = "<div class='product_basket'><span class='name_product_basket'>" + this_basket[i].name + "</span><span class='price_product_basket'>" + this_basket[i].price + "</span><span class='count_product_basket'>" + this_basket[i].count + "</span><input type='button' value='-' class='button_product_basket' id='button_basket_remove_" + i + "' onclick='remove_product_basket(this)'><input type='button' value='+' class='button_product_basket' id='button_basket_add_" + i + "' onclick='add_product_basket(this)'></div>"
+                    document.getElementsByClassName("basket")[0].insertAdjacentHTML("beforeend", html_code)                    
+                }
+            })
+            function remove_product_basket(this_button){
+                let remove_basket = {
+                    "id_user": localStorage.getItem("thisid"),
+                    "index_basket": this_button.id.split('_')[3]
+                }
+                socket.emit("remove_product_basket", remove_basket)
+            }
+
+            function add_product_basket(this_button){
+                let remove_basket = {
+                    "id_user": localStorage.getItem("thisid"),
+                    "index_basket": this_button.id.split('_')[3]
+                }
+                socket.emit("add_product_basket", remove_basket)
+            }
+        </script> 
+    </body> 
+</html>
+

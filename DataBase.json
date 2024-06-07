@@ -1,0 +1,66 @@
+{
+    "users": [
+        {
+            "name": "2",
+            "login": "2",
+            "password": "2",
+            "ID": 0,
+            "basket": [
+                {
+                    "name": "Кабанчик (элитный)",
+                    "price": 2000,
+                    "ID": 2,
+                    "count": 3
+                },
+                {
+                    "name": "штаны",
+                    "price": 40,
+                    "ID": 1,
+                    "count": 2
+                },
+                {
+                    "name": "Кабанчик",
+                    "price": 1111,
+                    "ID": 0,
+                    "count": 3
+                }
+            ]
+        }
+    ],
+    "markets": [
+        {
+            "name": "1",
+            "login": "1",
+            "password": "1",
+            "ID": 0
+        }
+    ],
+    "products": [
+        {
+            "name": "Кабанчик",
+            "desc": "весело бегает по полю",
+            "price": 1111,
+            "ID_Market": 0,
+            "ID": 0,
+            "count": 1
+        },
+        {
+            "name": "штаны",
+            "desc": "это не долор это гривень",
+            "price": 40,
+            "ID_Market": 1,
+            "ID": 1
+        },
+        {
+            "name": "Кабанчик (элитный)",
+            "desc": "очень весело бегает по полю",
+            "price": 2000,
+            "ID_Market": 0,
+            "ID": 2
+        }
+    ],
+    "admin": {
+        "login": "s",
+        "password": "s"
+    }
+}
