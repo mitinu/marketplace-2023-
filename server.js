@@ -179,6 +179,13 @@ io.sockets.on("connection", function(socket){
                 break
             }
         }
+        for (let i = 0; i < DataBase.products.length; i++) {
+            if (DataBase.products[i].ID_Market==id) {
+                DataBase.products.splice(i, 1)
+                i--
+            }
+            
+        }
         fse.writeFileSync("DataBase.json", JSON.stringify(DataBase, null, 4))
     })
     socket.on("delete_products", function(id){
@@ -242,4 +249,20 @@ io.sockets.on("connection", function(socket){
             }
         }
     })
+    socket.on("req_tegs_prodyct", function(id_prodyct){
+        for (let i = 0; i < DataBase.products.length; i++) {
+            if(DataBase.products[i].ID == id_prodyct){
+                socket.emit("return_tegs_product", DataBase.products[i].tegs)  
+                break
+            }
+        }
+    })
+    socket.on("delite_tag", function(id_product_and_index_tag){
+        console.log(id_product_and_index_tag.id_product)
+        console.log(id_product_and_index_tag.index_tag)
+        console.log(DataBase.products[id_product_and_index_tag.id_product].tegs[id_product_and_index_tag.index_tag])
+        DataBase.products[id_product_and_index_tag.id_product].tegs.splice(id_product_and_index_tag.index_tag, 1)
+        fse.writeFileSync("DataBase.json", JSON.stringify(DataBase, null, 4))
+    })
+
 })

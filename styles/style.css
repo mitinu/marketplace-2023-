@@ -37,6 +37,8 @@ header{
 }
 
 .menu_super{
+    margin: 10px auto;
+    padding: 5px;
     width: 380px;
     background-color: gray;
 }
@@ -214,6 +216,20 @@ input[type=button]:before{
     width: 22px;
     height: 22px;
 }
-
-/*vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
-
+.parnet_scroll{
+    width: 80%;
+    background-color: rebeccapurple;
+    padding: 5px 5%;
+}
+.parnet_scroll li{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.parnet_scroll li span{
+    align-content: center;
+}
+li .del_teg{
+    width: 22px;
+    height: 22px;
+}
