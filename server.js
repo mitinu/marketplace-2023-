@@ -1,6 +1,6 @@
 //криво работает вход
 // подключение библиотек 
-let { log } = require("console")
+let { log, Console } = require("console")
 let express = require("express") 
 let server = express() 
 let fse = require("fs-extra") 
@@ -107,8 +107,64 @@ io.sockets.on("connection", function(socket){
 
 
     })  
-    socket.on("start_index", function(){
-        socket.emit("return_product", DataBase.products)
+    socket.on("start_product_user", function(serch){
+        let return_product = DataBase.products.slice()
+        if(serch.serch_cwith){
+            for(let i_p = 0; i_p < return_product.length; i_p++){
+                let swith_add = false
+                
+                for(let i_p_t = 0; i_p_t < return_product[i_p].tegs.length; i_p_t++){
+                    for(let i_s_t = 0; i_s_t < serch.serch_tegs.length; i_s_t++){
+                        if(return_product[i_p].tegs[i_p_t] == serch.serch_tegs[i_s_t]){
+                            swith_add = true
+                            break
+                        }
+                    }
+                    if(swith_add){
+                        break
+                    }
+                    
+                }
+                if(!swith_add){
+                    return_product.splice(i_p, 1)
+                    i_p--
+                }
+            }
+        }
+        socket.emit("return_product", return_product)
+    })
+    socket.on("start_product_market", function(market){
+        let return_product = DataBase.products.slice()
+        for(let i = 0; i < return_product.length; i++){
+            if(return_product[i].ID_Market != market.id){
+                return_product.splice(i, 1)
+                i--
+            }
+        }
+        if(market.serch_cwith){
+            for(let i_p = 0; i_p < return_product.length; i_p++){
+                let swith_add = false
+                
+                for(let i_p_t = 0; i_p_t < return_product[i_p].tegs.length; i_p_t++){
+                    for(let i_s_t = 0; i_s_t < market.serch_tegs.length; i_s_t++){
+                        if(return_product[i_p].tegs[i_p_t] == market.serch_tegs[i_s_t]){
+                            swith_add = true
+                            break
+                        }
+                    }
+                    if(swith_add){
+                        break
+                    }
+                    
+                }
+                if(!swith_add){
+                    return_product.splice(i_p, 1)
+                    i_p--
+                }
+            }
+        }
+        
+        socket.emit("return_product", return_product)
     })
     socket.on("addgoods", function(goods_obj){
         caunt_id_product++
@@ -139,7 +195,6 @@ io.sockets.on("connection", function(socket){
                 if(switch_id){
                     for(let j = 0; j < DataBase.products.length; j++){
                         if(DataBase.products[j].ID == ID_product_and_user.id_product){
-                            console.log(DataBase.products[j])
                             element_basket.name = DataBase.products[j].name
                             element_basket.price = DataBase.products[j].price
                             element_basket.ID = DataBase.products[j].ID
@@ -258,11 +313,22 @@ io.sockets.on("connection", function(socket){
         }
     })
     socket.on("delite_tag", function(id_product_and_index_tag){
-        console.log(id_product_and_index_tag.id_product)
-        console.log(id_product_and_index_tag.index_tag)
-        console.log(DataBase.products[id_product_and_index_tag.id_product].tegs[id_product_and_index_tag.index_tag])
-        DataBase.products[id_product_and_index_tag.id_product].tegs.splice(id_product_and_index_tag.index_tag, 1)
+        for(let i = 0; i < DataBase.products.length; i++){
+            if(DataBase.products[i].ID == id_product_and_index_tag.id_product){
+                DataBase.products[i].tegs.splice(id_product_and_index_tag.index_tag, 1)
+                break
+            }
+        }
         fse.writeFileSync("DataBase.json", JSON.stringify(DataBase, null, 4))
     })
-
+    socket.on("add_teg", function(new_teg){
+        for(let i = 0; i < DataBase.products.length; i++){
+            if(DataBase.products[i].ID == new_teg.id_product){
+                DataBase.products[i].tegs.push(new_teg.text_teg)
+                break
+            }
+        }
+        fse.writeFileSync("DataBase.json", JSON.stringify(DataBase, null, 4))
+    })
+    
 })
